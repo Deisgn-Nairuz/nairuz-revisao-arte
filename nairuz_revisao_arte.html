@@ -853,10 +853,13 @@ function handleFile(e) {
 }
 
 async function runReview() {
-  if (!getApiKey()) {
-    alert('Configure sua API Key da Anthropic no campo do cabeçalho antes de continuar.');
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    alert('API Key da Anthropic não encontrada.\nVá em ⚙ Configurar e salve sua chave sk-ant-...');
     return;
   }
+  // Debug: confirm key is loaded (shows first 12 chars only)
+  console.log('API Key carregada:', apiKey.substring(0, 12) + '...');
   const c = clients[selectedClientForReview];
   document.getElementById('review-btn').disabled = true;
   const box = document.getElementById('result-box');
@@ -1073,7 +1076,11 @@ function goSettings() {
 function saveAllSettings() {
   // Anthropic key
   const ak = document.getElementById('api-key-input-settings').value.trim();
-  if (ak) localStorage.setItem('nairuz_apikey', ak);
+  if (!ak) {
+    alert('Por favor, insira a API Key da Anthropic antes de salvar.');
+    return;
+  }
+  localStorage.setItem('nairuz_apikey', ak);
   // Apps Script URL
   const su = document.getElementById('script-url-input').value.trim();
   if (su) localStorage.setItem('nairuz_script_url', su);
@@ -1082,7 +1089,9 @@ function saveAllSettings() {
   // Reload clients from Sheets
   loadClientsFromSheets();
   goPage('home', document.querySelector('.nav-item'));
-  alert('Configurações salvas! Recarregando clientes...');
+  // Confirm what was saved
+  const saved = localStorage.getItem('nairuz_apikey') || '';
+  alert('Configurações salvas!\nAPI Key: ' + (saved ? saved.substring(0,12) + '...' : 'NÃO SALVA') + '\n\nSe a key aparecer acima, está tudo certo.');
 }
 
 // ── INIT ──────────────────────────────────────────────
