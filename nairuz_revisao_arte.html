@@ -921,7 +921,7 @@ CRITÉRIOS DE AVALIAÇÃO (nota de 0 a 10):
 Seja específico e mencione elementos visuais concretos que você identifica na imagem.`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://nairuz-proxy.designnairuz.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
       body: JSON.stringify({
